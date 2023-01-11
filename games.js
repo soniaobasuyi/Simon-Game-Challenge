@@ -12,16 +12,12 @@ var level = 0;
 
 // Detect when a keyboard key has been pressed, call nextsequence() only when this happens for the first time,
 $(document).on("keydown", function() {
-
     if (!started) {
-    
-    // to change the h1 to level 0.
-    $("#level-title").text("Level " + level);
-    nextSequence();
-    started = true;
-}
+        $("#level-title").text("Level " + level);
+        nextSequence();
+        started = true;
+    }
 });
-
 
 $(".btn").on("click", function() {
 
@@ -29,11 +25,41 @@ $(".btn").on("click", function() {
     userClickedPattern.push(userChosenColour);
 
     playSound(userChosenColour);
-
+    
     animatePress(userChosenColour);
+
+    checkAnswer(userClickedPattern.length-1);
 });
 
+function checkAnswer(currentLevel) {
+    
+    if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
+
+        // to check if the user has finished their sequence.
+        if (gamePattern.length === userClickedPattern.length) {
+
+            // call nextSequence after user finishes their sequence
+            setTimeout (function() {
+                nextSequence();
+         }, 1000);
+        } 
+
+    }   else {
+        playSound("wrong");
+        $("body").addClass("game-over");
+        $("#level-title").text("Game Over, Press Any Key To Restart");
+
+        setTimeout(function() {
+            $("body").removeClass("game-over");
+        }, 200);
+
+        startOver();
+    }
+}
+
 function nextSequence() {
+
+    userClickedPattern = [];
 
     // to increase the level by 1 everytime this function is called.
     level++;
@@ -62,4 +88,8 @@ function animatePress(currentColour) {
     }, 100);
 }
 
-
+function startOver() {
+    level = 0;
+    gamePattern = [];
+    started = false;
+}
