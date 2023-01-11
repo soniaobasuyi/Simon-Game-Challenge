@@ -11,7 +11,7 @@ var started = false;
 var level = 0;
 
 // Detect when a keyboard key has been pressed, call nextsequence() only when this happens for the first time,
-$(document).on("keydown touchStart", function() {
+$(document).on("keydown", function() {
     if (!started) {
         $("#level-title").text("Level " + level);
         nextSequence();
